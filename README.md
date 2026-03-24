@@ -1,3 +1,4 @@
+
 # SpotiFAI API
 
 API que provee información y manipulación de playlists y canciones a SpotiFAI (https://github.com/nachinchona/spotifai-mobile)
