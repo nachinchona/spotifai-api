@@ -1,36 +1,5 @@
 require('dotenv').config();
 const { cargarPlaylists, eliminarPlaylist, modificarFavorito } = require('../models/loadPlaylists');
-const editarPlaylist = (req, res) => {
-    const idPlaylist = parseInt(req.params.idPlaylist);
-    const { name, description } = req.body;
-    const playlists = cargarPlaylists();
-    const playlistIndex = playlists.findIndex(p => p.id === idPlaylist);
-
-    if (!idPlaylist) {
-        return res.status(400).json({ message: 'Id no especificada' });
-    }
-
-    if (playlistIndex == -1) {
-        return res.status(404).json({ message: 'No se encontró la playlist' });
-    }
-
-    if (typeof name !== "string" && idPlaylist < 1) {
-        return res.status(400).json({ message: 'Nombre Invalido' });
-    }
-
-    if (typeof description !== "string") {
-        return res.status(400).json({ message: 'Descripcion Invalida' });
-    }
-
-    if (name) playlists[playlistIndex].name = name;
-    if (description) playlists[playlistIndex].description = description;
-
-    const updatedPlaylist = playlists[playlistIndex];
-    const rutaJsons = path.join(__dirname, '/public/json');
-    const filePath = path.join(rutaJsons, `playlist-${updatedPlaylist.id}.json`);
-    fs.writeFileSync(filePath, JSON.stringify(updatedPlaylist, null, 2), 'utf-8');
-    res.json({ message: 'Playlist actualizada correctamente!', playlist: updatedPlaylist });
-};
 
 const obtenerPlaylistPorID = (req, res) => {
     const idPlaylist = parseInt(req.params.idPlaylist);
@@ -165,9 +134,7 @@ const marcarFavorita = (req, res) => {
     }
 };
 
-
 module.exports = { 
-    editarPlaylist, 
     obtenerPlaylistPorID, 
     obtenerPlaylistsPaginadas, 
     actualizarPreviews, 

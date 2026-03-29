@@ -15,9 +15,13 @@ function cargarPlaylists() {
 // en realidad lo mueve de carpeta
 function eliminarPlaylist(id) {
     const source = path.join(__dirname, `../public/playlists/playlist-${id}.json`);
+    const ignoredDir = path.join(__dirname, `../public/ignored`);
     const destination = path.join(__dirname, `../public/ignored/playlist-${id}.json`);
 
-    console.log('playlist en modelo ' + id);
+    if (!fs.existsSync(ignoredDir)) {
+        fs.mkdirSync(ignoredDir, { recursive: true });
+    }
+
     fs.renameSync(source, destination);
 }
 
@@ -25,14 +29,11 @@ function modificarFavorito(id, isFavorite) {
     const filePath = path.join(__dirname, `../public/playlists/playlist-${id}.json`);
 
     try {
-        // 1. Leemos el archivo actual
         const content = fs.readFileSync(filePath, 'utf-8');
         const playlist = JSON.parse(content);
         
-        // 2. Le agregamos o modificamos la propiedad
         playlist.isFavorite = isFavorite;
         
-        // 3. Volvemos a escribir el archivo con el nuevo dato
         fs.writeFileSync(filePath, JSON.stringify(playlist, null, 2), 'utf-8');
 
         console.log(`Playlist ${id} actualizada. isFavorite: ${isFavorite}`);
